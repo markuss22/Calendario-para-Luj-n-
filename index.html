@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para Luján ❤️</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:linear-gradient(160deg,#260e19,#641f37,#321321);
+ color:#fff2e5;
+ font-family:Georgia,serif;
+ min-height:100vh;
+ text-align:center;
+}
+header{padding:45px 15px 25px}
+h1{font-size:clamp(38px,9vw,65px);font-weight:normal;margin:12px}
+h1 span{color:#e5bd79;font-style:italic}
+.sub{font-style:italic;color:#f1d9c6;font-size:17px}
+.intro{max-width:570px;margin:25px auto;line-height:1.7;padding:0 15px}
+.line{width:85px;height:1px;background:#d8b46f;margin:25px auto}
+.progress{max-width:400px;margin:25px auto;padding:0 15px}
+.track{height:6px;background:#ffffff30;border-radius:10px}
+.fill{height:100%;width:0;background:#e4bd78;border-radius:10px}
+#counter{font:12px Arial;margin-bottom:8px}
+.grid{
+ max-width:850px;margin:25px auto;padding:12px;
+ display:grid;grid-template-columns:repeat(4,1fr);gap:12px
+}
+.door{
+ min-height:125px;border:1px solid #d9b56e;
+ border-radius:13px;background:linear-gradient(145deg,#81364b,#421629);
+ color:white;padding:12px 5px;cursor:pointer;
+ display:flex;flex-direction:column;justify-content:center;
+ align-items:center;gap:8px;
+}
+.door:disabled{opacity:.55;cursor:not-allowed}
+.door.open{background:linear-gradient(145deg,#fff0d9,#d8b88d);color:#502536}
+.number{font:12px Arial;letter-spacing:2px;color:#e9c47e}
+.open .number{color:#794b34}
+.symbol{font-size:27px}
+.dayname{font-size:14px}
+.note{font:12px Arial;color:#e9d5c8;padding:15px}
+#surprise{
+ display:none;background:#fff1df;color:#492333;
+ max-width:600px;margin:25px auto;padding:28px 22px;
+ border-radius:18px;line-height:1.8;
+ box-shadow:0 10px 40px #0006;
+}
+#surprise h2{font-size:30px;font-weight:normal}
+#surprise button{border:0;background:#572039;color:white;padding:10px 20px;border-radius:20px}
+.song{display:inline-block;background:#572039;color:white;padding:12px 18px;border-radius:25px;text-decoration:none;margin:12px}
+footer{padding:35px;font-style:italic;color:#e5c9b4}
+@media(max-width:600px){.grid{grid-template-columns:repeat(3,1fr);gap:8px}.door{min-height:105px}}
+@media(max-width:370px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+ <div style="letter-spacing:4px;color:#e7c17c">DICIEMBRE · 2026</div>
+ <h1>24 días<br><span>de nosotros</span></h1>
+ <div class="sub">Un pequeño universo para vos, Luján ❤️</div>
+ <div class="line"></div>
+ <p class="intro">
+ Preparé algo especial para vos. Cada día esconde una sorpresa,
+ un recuerdo, una canción o unas palabras.
+ Quiero que disfrutes cada puertita y descubras lo que preparé.
+ Este pequeño diciembre es para vos.
+ </p>
+ <div class="progress">
+  <div id="counter">0 de 24 días abiertos</div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+ </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<p class="note">Cada día se abre una nueva sorpresa. Volvé mañana ❤️</p>
+
+<section id="surprise">
+ <div id="day"></div>
+ <h2 id="title"></h2>
+ <p id="message"></p>
+ <p id="gift" style="font-style:italic;color:#895b46"></p>
+ <a id="song" class="song" target="_blank" rel="noopener">♫ Escuchar canción</a>
+ <br><br>
+ <button onclick="closeSurprise()">Cerrar ❤️</button>
+</section>
+
+<footer>Hecho con cariño, para vos. ❤️</footer>
+
+<script>
+const surprises=[
+["Empezamos","Quería que este diciembre fuera diferente. Por eso preparé estas 24 sorpresas. Cada una tiene un poquito de cariño y está pensada para vos.","Hoy comienza nuestro calendario.","Beso Josean Log"],
+["Una canción","Hay canciones que nos hacen pensar en alguien especial. Hoy quiero que escuches esta y disfrutes un ratito.","Una canción para acompañar tu día.","Buscarte Lejos Duki"],
+["Lo que me gusta de vos","Me encanta tu creatividad, tu forma de pensar, tu mirada y esa manera tan tuya de hacer especiales las cosas.","Hoy te merecés un chocolatito.","FIAMORE LIT Killah"],
+["Nuestros recuerdos","Hay momentos que quisiera guardar para siempre. Los pequeños momentos también construyen historias enormes.","Elegí una foto nuestra.","Entre Nosotros LIT Killah"],
+["Un mimo","No hace falta una ocasión especial para regalarte algo lindo. Hoy simplemente quería sacarte una sonrisa.","Una pequeña sorpresa dulce.","Amor Ciego LIT Killah"],
+["Tu sonrisa","Ojalá hoy tengas muchos motivos para sonreír. Nunca te olvides de lo especial que sos.","Hoy toca un mimo.","Tan Bien LIT Killah"],
+["Un ratito de paz","Deseo que hoy tengas un día tranquilo, que puedas descansar y disfrutar de las pequeñas cosas.","Un ratito para vos.","Flexin LIT Killah Bizarrap"],
+["Lo cotidiano","Me gustan esos momentos sencillos que terminan convirtiéndose en recuerdos inolvidables.","Un plan sencillo y lindo.","La Trampa es Ley LIT Killah"],
+["Una sorpresa","Hoy quería regalarte algo que no necesitara explicación: un detalle hecho con cariño.","Una sorpresita para vos.","Beso Josean Log"],
+["Un pensamiento","A veces las cosas más lindas están en los pequeños detalles. Espero que hoy encuentres muchos.","Un detalle especial.","Buscarte Lejos Duki"],
+["Sos única","Tenés una manera de ser que no se parece a la de nadie. Nunca pierdas esa esencia tan tuya.","Un chocolate para vos.","FIAMORE LIT Killah"],
+["Llegamos a la mitad","Ya pasamos doce días de sorpresas. Ojalá cada uno te haya regalado un momento lindo.","Hoy elegí tu recuerdo favorito.","Entre Nosotros LIT Killah"],
+["Un abrazo","Si pudiera dejarte un abrazo dentro de esta pantalla, lo haría. Espero que estas palabras te hagan sentir querida.","Un abrazo enorme.","Amor Ciego LIT Killah"],
+["Un día para vos","Hoy quiero que hagas algo que te guste, algo que te haga feliz y que sea solamente para vos.","Elegí algo que disfrutes.","Tan Bien LIT Killah"],
+["Nuestra historia","Nuestra historia tiene recuerdos que siempre van a formar parte de nosotros. Hoy quería celebrar esos momentos.","Volvé a mirar alguna foto.","Flexin LIT Killah Bizarrap"],
+["Un detalle","No importa cuánto cueste un regalo. Lo importante es el cariño con el que se entrega.","Hoy puede haber un regalito improvisado.","La Trampa es Ley LIT Killah"],
+["Un deseo","Deseo que tengas motivos para reír, sueños que cumplir y momentos que te hagan sentir feliz.","Pedí un deseo.","Beso Josean Log"],
+["Un recuerdo favorito","Hay momentos que uno quisiera volver a vivir una y otra vez. Hoy te regalo un ratito para recordarlos.","Buscá un video nuestro.","Buscarte Lejos Duki"],
+["Tu creatividad","Nunca dejes de imaginar, crear y hacer las cosas a tu manera. Esa parte tuya es hermosa.","Hacé algo que te inspire.","FIAMORE LIT Killah"],
+["Cuenta regresiva","Cada vez falta menos para Navidad. Quería acompañarte con una sorpresa durante cada día.","Una pequeña sorpresa.","Entre Nosotros LIT Killah"],
+["Para vos","Ojalá nunca te falten motivos para sonreír ni personas que te hagan bien.","Un mimo especial.","Amor Ciego LIT Killah"],
+["Gracias","Gracias por los momentos compartidos, por las risas y por todos esos recuerdos que guardo con cariño.","Hoy quería dejarte un gracias.","Tan Bien LIT Killah"],
+["Mañana es Navidad","Llegamos casi al final. Mañana te espera la última sorpresa de este pequeño calendario.","Guardá un ratito para mañana.","Flexin LIT Killah Bizarrap"],
+["Para Luján","Llegaste al final de estas 24 sorpresas. Preparé este calendario pensando en vos, con canciones, palabras y pequeños detalles. Ojalá cada día te haya regalado una sonrisa. Feliz Navidad, Lu. ❤️","Tu último regalo es un recuerdo de nosotros.","Beso Josean Log"]
+];
+
+const icons=["✦","♫","♡","❄","✧","❅","☾","♡","✦","❄","✧","♡","❅","☾","✦","♡","❄","✧","♫","❅","♡","✦","☾","♥"];
+
+const now=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Argentina/Buenos_Aires"}));
+const unlocked=now.getFullYear()>2026?24:
+(now.getFullYear()===2026&&now.getMonth()===11?now.getDate():0);
+const grid=document.getElementById("grid");
+
+surprises.forEach((s,i)=>{
+ const b=document.createElement("button");
+ const available=i<unlocked;
+ b.className="door"+(available?" open":"");
+ b.disabled=!available;
+ b.innerHTML=`<span class="number">DÍA ${i+1}</span><span class="symbol">${available?icons[i]:"🔒"}</span><span class="dayname">${available?"Abrir sorpresa":"Esperame..."}</span>`;
+ b.onclick=()=>showSurprise(i);
+ grid.appendChild(b);
+});
+
+document.getElementById("counter").textContent=unlocked+" de 24 días abiertos";
+document.getElementById("fill").style.width=(unlocked/24*100)+"%";
+
+function showSurprise(i){
+ const s=surprises[i];
+ document.getElementById("day").textContent="DÍA "+(i+1)+" · DICIEMBRE";
+ document.getElementById("title").textContent=s[0];
+ document.getElementById("message").textContent=s[1];
+ document.getElementById("gift").textContent=s[2];
+ document.getElementById("song").href="https://open.spotify.com/search/"+encodeURIComponent(s[3]);
+ document.getElementById("song").textContent="♫ Escuchar "+s[3];
+ document.getElementById("surprise").style.display="block";
+ document.getElementById("surprise").scrollIntoView({behavior:"smooth"});
+}
+function closeSurprise(){
+ document.getElementById("surprise").style.display="none";
+}
+</script>
+</body>
+</html>
