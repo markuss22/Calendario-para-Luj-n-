@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>24 días de nosotros ❤️</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;padding:22px 14px;min-height:100vh;
+ background:linear-gradient(145deg,#210d19,#64263d,#291321);
+ color:#fff0e8;text-align:center;font-family:Georgia,serif
+}
+header{padding:25px 5px}
+.gold{color:#e9c18b;letter-spacing:3px;font:12px Arial}
+h1{font-size:clamp(38px,9vw,55px);font-weight:normal}
+h1 em{color:#e9c18b}
+.intro{max-width:500px;margin:25px auto;line-height:1.8}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;max-width:600px;margin:25px auto}
+.door{
+ min-height:100px;border:1px solid #e9c18b;border-radius:14px;
+ background:linear-gradient(145deg,#824057,#43182c);
+ color:white;font-size:27px;cursor:pointer
+}
+.door span{display:block;font:12px Arial;margin-top:8px}
+#surprise{
+ display:none;max-width:540px;margin:30px auto;padding:25px;
+ background:#fff0df;color:#51263a;border-radius:18px
+}
+#surprise h2{font-weight:normal;font-size:28px}
+#message{line-height:1.8}
+.gift{background:#f4dfca;padding:14px;border-radius:12px;line-height:1.6}
+.song{display:inline-block;background:#64263d;color:white;padding:12px 18px;border-radius:25px;text-decoration:none;margin:15px}
+.close{background:#64263d;color:white;border:0;border-radius:20px;padding:11px 22px}
+footer{padding:30px;color:#e9c18b;font-style:italic}
+@media(max-width:420px){.grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="gold">DICIEMBRE · 2026</div>
+ <h1>24 días<br><em>de nosotros</em></h1>
+ <p>Un pequeño universo hecho para vos, Luján. ❤️</p>
+ <p class="intro">
+ Querida Lu: preparé algo especial para vos.
+ Veinticuatro puertitas, veinticuatro sorpresas y un montón de detalles.
+ Cada día guarda algo que quiero regalarte.
+ Con mucho cariño. ❤️
+ </p>
+ <div class="gold">🎄 LAS 24 PUERTAS ESTÁN ABIERTAS 🎄</div>
+</header>
+
+<div class="grid" id="calendar"></div>
+
+<section id="surprise">
+ <div class="gold" id="number"></div>
+ <h2 id="title"></h2>
+ <p id="message"></p>
+ <div class="gift" id="gift"></div>
+ <a class="song" id="song" target="_blank" rel="noopener">♫ Escuchar canción</a>
+ <br>
+ <button class="close" onclick="closeDay()">Cerrar ❤️</button>
+</section>
+
+<footer>Hecho especialmente para vos, Luján. ❤️</footer>
+
+<script>
+const surprises = [
+["Empezamos","Quería que este diciembre fuera diferente. Preparé estas puertitas pensando en vos.","Tu primera sorpresa: algo dulce.","Buscarte Lejos Duki"],
+["Elegirte","Si pudiera volver al principio, volvería a contestar aquel mensaje y volvería a querer conocerte.","Un chocolatito para vos.","FIAMORE LIT Killah"],
+["Tu sonrisa","Me encanta saber que existe alguien capaz de hacer especiales hasta los días más comunes.","Un detalle que te saque una sonrisa.","Beso Josean Log"],
+["Nuestros momentos","Hay recuerdos que guardo con muchísimo cariño. Muchos de mis favoritos tienen que ver con vos.","Una foto o un recuerdo nuestro.","Duki canciones románticas"],
+["Un mimo","No hace falta una fecha especial para tener un detalle con vos.","Hoy te espera algo rico.","LIT Killah canciones"],
+["Vos","Me gustan tus ocurrencias, tus ideas y esa manera tan tuya de ver el mundo.","Un regalito sorpresa.","Buscarte Lejos Duki"],
+["Nuestra historia","Desde aquel primer encuentro bajo el árbol hasta todos los momentos que vinieron después.","Un recuerdo de aquel día.","Beso Josean Log"],
+["Un abrazo","A veces un abrazo dice mucho más que un montón de palabras.","Un abrazo bien fuerte, si te apetece.","FIAMORE LIT Killah"],
+["Pequeñas cosas","Quiero aprender a valorar cada pequeño momento que compartimos.","Tu golosina favorita.","Duki canciones románticas"],
+["Una canción","Hay canciones que apenas empiezan y ya nos hacen pensar en alguien.","Elegí una canción para escuchar juntos.","LIT Killah canciones"],
+["Un día lindo","Ojalá hoy encuentres muchos motivos para sonreír.","Una sorpresa improvisada.","Buscarte Lejos Duki"],
+["Gracias","Gracias por los momentos lindos, las risas y todo lo que compartimos.","Algo dulce para compartir.","Beso Josean Log"],
+["Tu magia","Tenés una forma de ser que te hace única. Nunca pierdas esa chispa.","Un detalle elegido con cariño.","FIAMORE LIT Killah"],
+["Un recuerdo","Quiero seguir guardando recuerdos lindos y momentos que nos hagan bien.","Una foto nuestra especial.","Duki canciones románticas"],
+["Tiempo juntos","A veces el mejor regalo es compartir un ratito sin apuros.","Un plan para compartir, si tenés ganas.","LIT Killah canciones"],
+["Dulce sorpresa","Hoy no hay muchas palabras: simplemente quería hacerte feliz un ratito.","Tu chocolate favorito.","Buscarte Lejos Duki"],
+["Admirarte","Me gusta tu creatividad, tus ideas y esa manera tan especial que tenés de hacer las cosas.","Una notita escrita a mano.","Beso Josean Log"],
+["Un deseo","Deseo que nunca te falten motivos para sentirte querida y valorada.","Un pequeño regalo sorpresa.","FIAMORE LIT Killah"],
+["Nuestro lugar","Hay lugares que se vuelven especiales por las personas con las que los compartimos.","Un recuerdo de algún lugar nuestro.","Duki canciones románticas"],
+["Un mimo más","Hoy quería recordarte que merecés cosas lindas y momentos felices.","Algo rico para vos.","LIT Killah canciones"],
+["Lo que viene","Me gustaría que sigamos construyendo momentos lindos, sin dejar de aprender.","Una sorpresa que elijas vos.","Buscarte Lejos Duki"],
+["Casi Navidad","Se acerca Navidad y quería que este calendario te acompañara con mucho cariño.","Un detalle navideño.","Beso Josean Log"],
+["Para vos","Cada puerta fue una excusa para recordarte lo especial que sos para mí.","Un regalito preparado con amor.","FIAMORE LIT Killah"],
+["Feliz Navidad","Llegamos al último día. Gracias por abrir cada puertita y compartir este pequeño regalo conmigo. Te deseo una Navidad hermosa, Lu.","La última sorpresa: un regalo especial.","Buscarte Lejos Duki"]
+];
+
+const calendar = document.getElementById("calendar");
+
+surprises.forEach((item,index)=>{
+ const button=document.createElement("button");
+ button.className="door";
+ button.type="button";
+ button.innerHTML="🎁<span>DÍA "+(index+1)+"</span>";
+ button.addEventListener("click",()=>{
+  document.getElementById("number").textContent="DÍA "+(index+1)+" · DICIEMBRE";
+  document.getElementById("title").textContent=item[0];
+  document.getElementById("message").textContent=item[1];
+  document.getElementById("gift").textContent="🎁 "+item[2];
+  document.getElementById("song").href=
+   "https://open.spotify.com/search/"+encodeURIComponent(item[3]);
+  document.getElementById("surprise").style.display="block";
+  document.getElementById("surprise").scrollIntoView({behavior:"smooth"});
+ });
+ calendar.appendChild(button);
+});
+
+function closeDay(){
+ document.getElementById("surprise").style.display="none";
+}
+</script>
+</body>
+</html>
